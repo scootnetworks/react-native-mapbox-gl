@@ -895,11 +895,15 @@ public class RCTMGLMapView extends MapView implements
         WritableMap payload = new WritableNativeMap();
         AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
 
+        // pad format T R B L
+        // getCamaeraForlatLngBounds expects L T R B
+        // https://github.com/mapbox/mapbox-gl-native/blob/cf4b4e728c26e444514f6ba792c207692350eb57/platform/android/MapboxGLAndroidSDK/src/main/java/com/mapbox/mapboxsdk/maps/NativeMapView.java#L238-L241
+        // https://github.com/mapbox/mapbox-gl-native/blob/cf4b4e728c26e444514f6ba792c207692350eb57/platform/android/MapboxGLAndroidSDK/src/main/java/com/mapbox/mapboxsdk/maps/NativeMapView.java#L910
         int[] padding = {
-                pad.getInt(0),
-                pad.getInt(1),
-                pad.getInt(2),
-                pad.getInt(3),
+                pad.getInt(3), // left
+                pad.getInt(0), // top
+                pad.getInt(1), // right
+                pad.getInt(2), // bottom
         };
 
         LatLngBounds latLngBounds = LatLngBounds.from(
