@@ -244,6 +244,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final int METHOD_TAKE_SNAP = 7;
     public static final int METHOD_GET_ZOOM = 8;
     public static final int METHOD_GET_CENTER = 9;
+    public static final int METHOD_GET_BOUNDING_CAMERA_POSITION = 10;
 
     @Nullable
     @Override
@@ -258,6 +259,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put("takeSnap", METHOD_TAKE_SNAP)
                 .put("getZoom", METHOD_GET_ZOOM)
                 .put("getCenter", METHOD_GET_CENTER)
+                .put("getBoundingCameraPosition", METHOD_GET_BOUNDING_CAMERA_POSITION)
                 .build();
     }
 
@@ -305,6 +307,14 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 break;
             case METHOD_GET_CENTER:
                 mapView.getCenter(args.getString(0));
+                break;
+            case METHOD_GET_BOUNDING_CAMERA_POSITION:
+                mapView.getBoundingCameraPosition(
+                        args.getString(0),
+                        args.getArray(1),
+                        args.getArray(2),
+                        args.getArray(3)
+                );
                 break;
         }
     }

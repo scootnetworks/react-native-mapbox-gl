@@ -885,6 +885,38 @@ public class RCTMGLMapView extends MapView implements
 
     //endregion
 
+    public void getBoundingCameraPosition(
+            String callbackID,
+            ReadableArray northEastCoordinates,
+            ReadableArray southWestCoordinates,
+            ReadableArray pad
+    ) {
+        WritableMap payload = new WritableNativeMap();
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+
+        int[] padding = {
+                pad.getInt(0),
+                pad.getInt(1),
+                pad.getInt(2),
+                pad.getInt(3),
+        };
+
+        LatLngBounds latLngBounds = LatLngBounds.from(
+                northEastCoordinates.getDouble(1),
+                northEastCoordinates.getDouble(0),
+                southWestCoordinates.getDouble(1),
+                southWestCoordinates.getDouble(0));
+        CameraPosition cameraPosition = mMap.getCameraForLatLngBounds(latLngBounds, padding);
+
+        payload.putDouble("latitude", cameraPosition.target.getLatitude());
+        payload.putDouble("longitude", cameraPosition.target.getLongitude());
+        payload.putDouble("zoom", cameraPosition.zoom);
+
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
+    }
+
     //region Methods
 
     public void setCamera(String callbackID, ReadableMap args) {
