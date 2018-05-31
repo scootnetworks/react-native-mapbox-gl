@@ -32,6 +32,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.geometry.VisibleRegion;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -421,6 +422,11 @@ public class RCTMGLMapView extends MapView implements
                 long curTimestamp = System.currentTimeMillis();
                 boolean curAnimated = mCameraChangeTracker.isAnimated();
                 if (curTimestamp - lastTimestamp < 500 && curAnimated == lastAnimated) {
+                      // even if we don't send the change event, we need to set the reason...
+                    //this happens when you have multiple calls to setCamera very quickly. This method will short circuit,
+                    //and then the next time the user moves the map, it will think it is NOT from a user interaction , because
+                    // this flag was not reset
+                    mCameraChangeTracker.setReason(-1);
                     return;
                 }
 
@@ -884,6 +890,42 @@ public class RCTMGLMapView extends MapView implements
     }
 
     //endregion
+
+    public void getBoundingCameraPosition(
+            String callbackID,
+            ReadableArray northEastCoordinates,
+            ReadableArray southWestCoordinates,
+            ReadableArray pad
+    ) {
+        WritableMap payload = new WritableNativeMap();
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+
+        // pad format T R B L
+        // getCamaeraForlatLngBounds expects L T R B
+        // https://github.com/mapbox/mapbox-gl-native/blob/cf4b4e728c26e444514f6ba792c207692350eb57/platform/android/MapboxGLAndroidSDK/src/main/java/com/mapbox/mapboxsdk/maps/NativeMapView.java#L238-L241
+        // https://github.com/mapbox/mapbox-gl-native/blob/cf4b4e728c26e444514f6ba792c207692350eb57/platform/android/MapboxGLAndroidSDK/src/main/java/com/mapbox/mapboxsdk/maps/NativeMapView.java#L910
+        int[] padding = {
+                pad.getInt(3), // left
+                pad.getInt(0), // top
+                pad.getInt(1), // right
+                pad.getInt(2), // bottom
+        };
+
+        LatLngBounds latLngBounds = LatLngBounds.from(
+                northEastCoordinates.getDouble(1),
+                northEastCoordinates.getDouble(0),
+                southWestCoordinates.getDouble(1),
+                southWestCoordinates.getDouble(0));
+        CameraPosition cameraPosition = mMap.getCameraForLatLngBounds(latLngBounds, padding);
+
+        payload.putDouble("latitude", cameraPosition.target.getLatitude());
+        payload.putDouble("longitude", cameraPosition.target.getLongitude());
+        payload.putDouble("zoom", cameraPosition.zoom);
+
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
+    }
 
     //region Methods
 

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   NativeModules,
   requireNativeComponent,
+  Platform,
 } from 'react-native';
 import { makePoint, makeLatLngBounds } from '../utils/geoUtils';
 
@@ -464,6 +465,20 @@ class MapView extends React.Component {
       duration: duration,
       mode: MapboxGL.CameraModes.None,
     });
+  }
+
+  // Specific to scoot. This addresses the issue outlined in this mapbox react native issue.
+  // https://github.com/mapbox/react-native-mapbox-gl/issues/1218
+  async getBoundingCameraPositionForAndroid(northEastCoordinate, southWestCoordinate, padding) {
+    if (!this._nativeRef) {
+      return Promise.reject("No native reference found");
+    }
+
+    if (Platform.OS !== 'android') {
+      return Promise.reject("This may only be called by Android.")
+    }
+
+    return this._runNativeCommand('getBoundingCameraPosition', [northEastCoordinate, southWestCoordinate, padding]);
   }
 
   /**
