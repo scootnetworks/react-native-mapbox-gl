@@ -19,6 +19,8 @@ import com.mapbox.services.commons.models.Position;
 
 import java.util.List;
 
+import android.util.Log;
+
 /**
  * Created by nickitaliano on 11/7/17.
  */
@@ -146,7 +148,13 @@ public class GeoJSONUtils {
         if (coordinates == null || coordinates.size() < 2) {
             return null;
         }
-        return new LatLng(coordinates.getDouble(1), coordinates.getDouble(0));
+
+        try {
+            return new LatLng(coordinates.getDouble(1), coordinates.getDouble(0));
+        } catch (Throwable t) {
+            Log.e("GeoJsonUtils", "exception trying to parse out the lat/long doubles from the native array: " + coordinates, t);
+        }
+        return null;
     }
 
     public static Point toPointGeometry(String featureJSONString) {
