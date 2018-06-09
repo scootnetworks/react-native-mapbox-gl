@@ -1259,8 +1259,13 @@ public class RCTMGLMapView extends MapView implements
     }
 
     private void updateLocationLayer() {
-        if (mLocationLayer == null) {
-            mLocationLayer = new LocationLayerPlugin(this, mMap, mLocationManger.getEngine());
+       if (mLocationLayer == null) {
+            try {
+                mLocationLayer = new LocationLayerPlugin(this, mMap, mLocationManger.getEngine());
+            }catch (CannotAddSourceException e){
+                Log.d("RCTMGLMapView", "location layer already added (bug with HAIWEI).");
+                return;
+            }
         }
 
         int userLayerMode = UserTrackingMode.getMapLayerMode(mUserLocation.getTrackingMode(), mShowUserLocation);
