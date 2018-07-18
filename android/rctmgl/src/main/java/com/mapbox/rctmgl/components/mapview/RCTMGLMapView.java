@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.text.LoginFilter;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -43,7 +42,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap.OnMarkerViewClickListener;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
-import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.storage.FileSource;
@@ -1383,6 +1381,7 @@ public class RCTMGLMapView extends MapView implements
         } else if (mUserTrackingState == UserTrackingState.CHANGED) {
             updateUserLocationIncrementally(isAnimated);
         }
+
     }
 
     private void updateUserLocationSignificantly(boolean isAnimated) {
