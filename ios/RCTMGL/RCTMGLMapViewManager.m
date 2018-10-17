@@ -333,14 +333,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     NSMutableDictionary<NSString *, id<MGLFeature>> *hits = [[NSMutableDictionary alloc] init];
     NSMutableArray<RCTMGLSource *> *hitTouchableSources = [[NSMutableArray alloc] init];
     for (RCTMGLSource *touchableSource in touchableSources) {
-        NSDictionary<NSString *, NSNumber *> *hitbox = touchableSource.hitbox;
-        float halfWidth = [hitbox[@"width"] floatValue] / 2.f;
-        float halfHeight = [hitbox[@"height"] floatValue] / 2.f;
-        
-        CGFloat top = screenPoint.y - halfHeight;
-        CGFloat left = screenPoint.x - halfWidth;
-        CGRect hitboxRect = CGRectMake(left, top, [hitbox[@"width"] floatValue], [hitbox[@"height"] floatValue]);
-        
+        CGRect hitboxRect = CGRectMake(screenPoint.x, screenPoint.y, 0, 0);
         NSArray<id<MGLFeature>> *features = [mapView visibleFeaturesInRect:hitboxRect
                                                      inStyleLayersWithIdentifiers:[NSSet setWithArray:[touchableSource getLayerIDs]]
                                                      predicate:nil];
