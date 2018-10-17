@@ -571,20 +571,12 @@ public class RCTMGLMapView extends MapView implements
         Map<String, Feature> hits = new HashMap<>();
         List<RCTSource> hitTouchableSources = new ArrayList<>();
         for (RCTSource touchableSource : touchableSources) {
-            Map<String, Double> hitbox = touchableSource.getTouchHitbox();
-            if (hitbox == null) {
-                continue;
-            }
-
-            float halfWidth = hitbox.get("width").floatValue() / 2.0f;
-            float halfHeight = hitbox.get("height").floatValue() / 2.0f;
-
             RectF hitboxF = new RectF();
             hitboxF.set(
-                    screenPoint.x - halfWidth,
-                    screenPoint.y - halfHeight,
-                    screenPoint.x + halfWidth,
-                    screenPoint.y + halfHeight);
+                    screenPoint.x,
+                    screenPoint.y,
+                    screenPoint.x,
+                    screenPoint.y);
 
             List<Feature> features = mMap.queryRenderedFeatures(hitboxF, touchableSource.getLayerIDs());
             if (features.size() > 0) {
