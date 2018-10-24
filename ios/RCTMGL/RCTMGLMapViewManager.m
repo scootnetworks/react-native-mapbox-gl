@@ -322,6 +322,40 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(getBoundingCameraPosition:(nonnull NSNumber*)reactTag
+                  ne:(NSArray<NSNumber*>*)ne
+                  sw:(NSArray<NSNumber*>*)sw
+                  padding:(NSArray<NSNumber*> *)padding
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+        
+        RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        
+        MGLMapCamera *camera = [reactMapView cameraThatFitsCoordinateBounds:MGLCoordinateBoundsMake(sw, ne)
+                                                                edgePadding:UIEdgeInsetsMake(
+                                                                                             [padding[0] floatValue],
+                                                                                             [padding[1] floatValue],
+                                                                                             [padding[2] floatValue],
+                                                                                             [padding[3] floatValue],
+                                                                                             )];
+        
+        
+        resolve(@{
+                  @"latitude": camera.centerCoordinate.latitude,
+                  @"longitude": camera.centerCoordinate.longitude,
+                  @"zoom": camera.zoom
+                  });
+    }];
+}
+
 #pragma mark - UIGestureRecognizers
 
 - (void)didTapMap:(UITapGestureRecognizer *)recognizer
