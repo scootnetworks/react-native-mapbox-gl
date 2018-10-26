@@ -32,15 +32,27 @@
 
 - (void)_moveCamera:(RCTMGLMapView*)mapView animated:(BOOL)animated withCompletionHandler:(void (^)(void))completionHandler
 {
+    CGFloat paddingTop = [_cameraStop.padding[@"top"] floatValue];
+    CGFloat paddingLeft = [_cameraStop.padding[@"left"] floatValue];
+    CGFloat paddingBottom = [_cameraStop.padding[@"bottom"] floatValue];
+    CGFloat paddingRight = [_cameraStop.padding[@"right"] floatValue];
     
-    if ([self _hasCenterCoordAndZoom]) {
+    BOOL noPadding = !paddingTop && !paddingLeft && !paddingBottom && !paddingRight;
+    
+    if ([self _hasCenterCoordAndZoom] && noPadding) {
         [self _centerCoordWithZoomCamera:mapView animated:animated withCompletionHandler:completionHandler];
     } else {
         MGLMapCamera *nextCamera = [self _makeCamera:mapView];
+        UIEdgeInsets edgeInsets = UIEdgeInsetsMake(paddingTop,
+                                                   paddingLeft,
+                                                   paddingBottom,
+                                                   paddingRight);
+  
         [mapView setCamera:nextCamera
-                 withDuration:animated ? _cameraStop.duration : 0
-                 animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
-                 completionHandler:completionHandler];
+              withDuration:animated ? _cameraStop.duration : 0
+   animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
+               edgePadding:edgeInsets
+         completionHandler:completionHandler];
     }
 }
 
