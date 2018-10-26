@@ -339,19 +339,20 @@ RCT_EXPORT_METHOD(getBoundingCameraPosition:(nonnull NSNumber*)reactTag
         
         RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
         
-        MGLMapCamera *camera = [reactMapView cameraThatFitsCoordinateBounds:MGLCoordinateBoundsMake(sw, ne)
+        MGLCoordinateBounds bounds = MGLCoordinateBoundsMake(CLLocationCoordinate2DMake([sw[1] floatValue], [sw[0] floatValue]),
+                                                             CLLocationCoordinate2DMake([ne[1] floatValue], [ne[0] floatValue]));
+        
+        MGLMapCamera *camera = [reactMapView cameraThatFitsCoordinateBounds:bounds
                                                                 edgePadding:UIEdgeInsetsMake(
                                                                                              [padding[0] floatValue],
-                                                                                             [padding[1] floatValue],
-                                                                                             [padding[2] floatValue],
                                                                                              [padding[3] floatValue],
+                                                                                             [padding[2] floatValue],
+                                                                                             [padding[1] floatValue]
                                                                                              )];
         
-        
         resolve(@{
-                  @"latitude": camera.centerCoordinate.latitude,
-                  @"longitude": camera.centerCoordinate.longitude,
-                  @"zoom": camera.zoom
+                  @"latitude": @(camera.centerCoordinate.latitude),
+                  @"longitude": @(camera.centerCoordinate.longitude),
                   });
     }];
 }
