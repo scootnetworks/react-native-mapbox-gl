@@ -645,6 +645,7 @@ class MapView extends React.Component {
 
   _createStopConfig(config = {}) {
     let stopConfig = {
+      ...config,
       mode: isNumber(config.mode) ? config.mode : MapboxGL.CameraModes.Ease,
       pitch: config.pitch,
       heading: config.heading,
