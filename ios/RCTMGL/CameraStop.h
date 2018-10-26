@@ -24,6 +24,7 @@
 @property (nonatomic, assign) MGLCoordinateBounds bounds;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *padding;
+@property (nonatomic, assign) NSNumber *altitude;
 
 + (CameraStop*)fromDictionary:(NSDictionary*)args;
 

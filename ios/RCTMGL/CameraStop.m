@@ -85,6 +85,10 @@
                           @"bottom": @0
                           } mutableCopy];
     }
+
+    if (args[@"altitude"]) {
+        stop.altitude = args[@"altitude"];
+    }
     
     return stop;
 }

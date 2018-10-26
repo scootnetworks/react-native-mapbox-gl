@@ -102,7 +102,9 @@
         nextCamera.heading = [_cameraStop.heading floatValue];
     }
     
-    if (_cameraStop.zoom != nil) {
+    if (_cameraStop.altitude != nil) {
+        nextCamera.altitude = [_cameraStop.altitude doubleValue];
+    } else if (_cameraStop.zoom != nil) {
         nextCamera.altitude = [mapView altitudeFromZoom:[_cameraStop.zoom doubleValue]];
     }
     
