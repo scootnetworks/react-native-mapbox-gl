@@ -23,6 +23,8 @@
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, assign) MGLCoordinateBounds bounds;
 
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *padding;
+
 + (CameraStop*)fromDictionary:(NSDictionary*)args;
 
 @end
