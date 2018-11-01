@@ -322,6 +322,22 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(zoomTo:(nonnull NSNumber *)reactTag
+                  zoomLevel:(nonnull NSNumber *)zoomLevel)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+        
+        __weak RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        [reactMapView setZoomLevel:[zoomLevel doubleValue] animated:YES];
+    }];
+}
+
 RCT_EXPORT_METHOD(getBoundingCameraPosition:(nonnull NSNumber*)reactTag
                   ne:(NSArray<NSNumber*>*)ne
                   sw:(NSArray<NSNumber*>*)sw

@@ -525,6 +525,11 @@ class MapView extends React.Component {
     if (!this._nativeRef) {
       return Promise.reject('No native reference found');
     }
+
+    if (Platform.OS === "ios") {
+      return this._runNativeCommand('zoomTo', [zoomLevel]);
+    }
+
     return this.setCamera({
       zoom: zoomLevel,
       duration: duration,
