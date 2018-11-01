@@ -36,11 +36,6 @@ public class CameraStop {
     private int mDuration = 2000;
     private MapboxMap.CancelableCallback mCallback;
 
-    private int mPaddingTop = 0;
-    private int mPaddingLeft = 0;
-    private int mPaddingRight = 0;
-    private int mPaddingBottom = 0;
-
     public CameraStop() {}
 
     public void setBearing(double bearing) {
@@ -77,13 +72,6 @@ public class CameraStop {
 
     public void setMode(@CameraMode.Mode int mode) {
         mMode = mode;
-    }
-
-    public void setPadding(ReadableMap padding) {
-        mPaddingTop = ReadableMap.getInt("top");
-        mPaddingLeft = ReadableMap.getInt("left");
-        mPaddingRight = ReadableMap.getInt("right");
-        mPaddingBottom = ReadableMap.getInt("bottom");
     }
 
     public CameraUpdateItem toCameraUpdate() {
@@ -167,10 +155,6 @@ public class CameraStop {
                 default:
                     stop.setMode(CameraMode.EASE);
             }
-        }
-
-        if (readableMap.hasKey("padding")) {
-            stop.setPadding(readableMap.getMap("padding"));
         }
 
         stop.setCallback(callback);
