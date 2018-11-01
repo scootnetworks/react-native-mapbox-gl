@@ -79,7 +79,7 @@ public class CameraStop {
         mMode = mode;
     }
 
-    public voic setPadding(ReadableMap padding) {
+    public void setPadding(ReadableMap padding) {
         mPaddingTop = ReadableMap.getInt("top");
         mPaddingLeft = ReadableMap.getInt("left");
         mPaddingRight = ReadableMap.getInt("right");
