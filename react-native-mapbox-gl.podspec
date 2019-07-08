@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   
   # Fix to allow this pod to be used alongside MapboxNavigation
   # Make sure the versions are matching in both pods
-  s.dependency "Mapbox-iOS-SDK", "3.7.3"
+  s.dependency "Mapbox-iOS-SDK", "3.7.8"
   s.dependency 'React'
 end
