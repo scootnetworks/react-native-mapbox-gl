@@ -1562,7 +1562,7 @@ public class RCTMGLMapView extends MapView implements
         this.mHandledMapChangedEvents = new HashSet<>(eventsWhiteList);
     }
 
-    private void sendUserLocationUpdateEvent(Location location) {
+    protected void sendUserLocationUpdateEvent(Location location) {
         if(location == null){
             return;
         }
