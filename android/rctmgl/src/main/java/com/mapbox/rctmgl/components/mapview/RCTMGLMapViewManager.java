@@ -260,23 +260,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     /**
      * make this overridable for subclasses to add their own methods
      */
-    protected Builder<String, Integer> getMapBuilder(){
-        return MapBuilder.<String, Integer>builder()
-            .put("setCamera", METHOD_SET_CAMERA)
-            .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
-            .put("queryRenderedFeaturesInRect", METHOD_QUERY_FEATURES_RECT)
-            .put("getVisibleBounds", METHOD_VISIBLE_BOUNDS)
-            .put("getPointInView", METHOD_GET_POINT_IN_VIEW)
-            .put("getCoordinateFromView", METHOD_GET_COORDINATE_FROM_VIEW)
-            .put("takeSnap", METHOD_TAKE_SNAP)
-            .put("getZoom", METHOD_GET_ZOOM)
-            .put("getCenter", METHOD_GET_CENTER);
-
-    }
-
-    @Nullable
-    @Override
-    public Map<String, Integer> getCommandsMap() {
+    protected Builder<String, Integer> getMapBuilder() {
         return MapBuilder.<String, Integer>builder()
                 .put("setCamera", METHOD_SET_CAMERA)
                 .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
@@ -287,9 +271,15 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put("takeSnap", METHOD_TAKE_SNAP)
                 .put("getZoom", METHOD_GET_ZOOM)
                 .put("getCenter", METHOD_GET_CENTER)
-                .put( "setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
-                .put("showAttribution", METHOD_SHOW_ATTRIBUTION)
-                .build();
+                .put("setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
+                .put("showAttribution", METHOD_SHOW_ATTRIBUTION);
+
+    }
+
+    @Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        return getMapBuilder().build();
     }
 
     @Override
